@@ -1,0 +1,29 @@
+{
+  "name": "node-ds",
+  "version": "0.0.1",
+  "description": "A common data-structure and basic algorithm implemention in javascript",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bda-research/node-ds.git"
+  },
+  "keywords": [
+    "data-structure",
+    "algorithm",
+    "linkedlist",
+    "queue",
+    "stack",
+    "tree",
+    "sort",
+    "search"
+  ],
+  "author": "bda-research",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bda-research/node-ds/issues"
+  },
+  "homepage": "https://github.com/bda-research/node-ds#readme"
+}
