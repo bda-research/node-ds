@@ -1,10 +1,10 @@
 {
   "name": "node-ds",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A common data-structure and basic algorithm implemention in javascript",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node tests/*.js"
   },
   "repository": {
     "type": "git",

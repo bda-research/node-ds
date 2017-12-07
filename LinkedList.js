@@ -1,7 +1,7 @@
 
 'use strict'
 
-export class LinkedList{
+module.exports = class LinkedList{
     constructor(){
 	this._size = 0;
 	this.head = null;
