@@ -86,6 +86,16 @@ module.exports = class DoublyLinkedList{
 	
 	return rstArray;
     }
+
+    // [Symbol.iterator]() {
+    // 	let tmp = this.head;
+    // 	return {
+    // 	    next:()=>{
+		
+    // 		return {done: true}
+    // 	    }
+    // 	};
+    // }
     
     get length(){
 	return this._size;
@@ -93,6 +103,10 @@ module.exports = class DoublyLinkedList{
     
     toString(){
 	return this.traverse(n=>n.val).join(" <-> ");
+    }
+
+    clear(){
+	while(this.deleteLast());
     }
 }
 

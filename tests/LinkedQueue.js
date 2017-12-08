@@ -7,10 +7,10 @@ const LinkedQueue = require('../LinkedQueue.js')
 let ts = function(){return this.name;};
 let ll = new LinkedQueue();
 ll
-    .enqueueValue({name:"a", toString:ts})
-    .enqueueValue({name:"b", toString:ts})
-    .enqueueValue({name:"c", toString: ts})
-    .enqueueValue({name:"d", toString: ts});
+    .enqueue({name:"a", toString:ts})
+    .enqueue({name:"b", toString:ts})
+    .enqueue({name:"c", toString: ts})
+    .enqueue({name:"d", toString: ts});
 
 console.log(ll.toString());
 
@@ -21,8 +21,8 @@ assert.equal(ll.dequeueNode().val.name, "b");
 
 assert.equal(ll.length, 2, "incorrect length");
 
-ll.enqueueValue({name:"e", toString: ts});
-ll.enqueueValue({name:"f", toString: ts});
+ll.enqueue({name:"e", toString: ts});
+ll.enqueue({name:"f", toString: ts});
 
 assert.equal(ll.length, 4, "incorrect length");
 
@@ -34,8 +34,11 @@ ll.dequeueNode();
 
 assert.equal(ll.length, 0, "incorrect length");
 
-ll.enqueueValue({name:"x", toString: ts});
-ll.enqueueValue({name:"y", toString: ts});
+ll.enqueue({name:"x", toString: ts});
+ll.enqueue({name:"y", toString: ts});
 
 assert.equal(ll.length, 2, "incorrect length");
+
+ll.clear();
+assert.equal(ll.length, 0);
 console.log("[LinkedQueue] All test cases passed!");

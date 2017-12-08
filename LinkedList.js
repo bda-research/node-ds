@@ -38,6 +38,41 @@ module.exports = class LinkedList{
     insertEnd(val){
 	return this.insertEndNode( _node(val) );
     }
+
+    deleteFirst(){
+	if(null === this.head){
+	    return null;
+	}
+
+	let n = this.head;
+	this.head = this.head.next;
+
+	n.next = null;
+	--this._size;
+	return n;
+    }
+
+    deleteLast(){
+	if(null === this.head){
+	    return null;
+	}
+
+	let p1 = this.head, p2 = p1.next;
+	
+	if(null === p2){
+	    this.head = null;
+	    return p1;
+	}
+	
+	while(p2.next){
+	    p1= p2;
+	    p2 = p2.next;
+	}
+
+	p1.next = null;
+	--this._size;
+	return p1;
+    }
     
     get length(){
 	return this._size;
@@ -55,6 +90,10 @@ module.exports = class LinkedList{
     
     toString(){
 	return this.traverse(n=>n.val).join(" -> ");
+    }
+
+    clear(){
+	while(this.deleteFirst());
     }
 }
 

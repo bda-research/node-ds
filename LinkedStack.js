@@ -3,33 +3,33 @@
 
 const DoublyLinkedList = require('./DoublyLinkedList.js')
 
-module.exports = class LinkedQueue{
+module.exports = class LinkedStack{
     constructor(){
 	this._list = new DoublyLinkedList();
     }
 
-    enqueueNode(node){
+    pushNode(node){
 	this._list.insertEndNode(node);
 	return this;
     }
 
-    enqueue(val){
+    push(val){
 	this._list.insertEnd(val);
 	return this;
     }
 
-    dequeueNode(){
-	return this._list.deleteFirst();
+    popNode(){
+	return this._list.deleteLast();
     }
 
-    dequeue(){
-	return this._list.deleteFirst().val;
+    pop(){
+	return this._list.deleteLast().val;
     }
 
     peek(){
-	return this._list.head.val;
+	return this._list.tail.val;
     }
-
+    
     get length(){
 	return this._list.length;
     }
