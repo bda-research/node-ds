@@ -29,7 +29,7 @@ class Random {
         }
 
         for (let i = 0; i < a.length; i++) {
-            let r = Math.floor(Math.random(a.length - i));
+            let r = i + Math.floor(Math.random()*(a.length - i));
             swap(a, i, r);
         }
     }
