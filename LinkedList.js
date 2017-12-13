@@ -41,7 +41,7 @@ module.exports = class LinkedList{
 
     deleteFirst(){
 	if(null === this.head){
-	    return null;
+	    throw new Error("InvalidOperation, the list is empty.");
 	}
 
 	let n = this.head;
@@ -54,7 +54,7 @@ module.exports = class LinkedList{
 
     deleteLast(){
 	if(null === this.head){
-	    return null;
+	    throw new Error("InvalidOperation, the list is empty.");
 	}
 
 	let p1 = this.head, p2 = p1.next;

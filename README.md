@@ -5,18 +5,32 @@ A common data-structure and basic algorithm implemention in javascript
 
 * [Data Structures](#data-structures)
   * [Linear](#linear)
+    * [Array](#array)
     * [Linked List](#linked-list)
 	* [Doubly Linked List](#doubly-linked-list)
 	* [Linked Queue](#linked-queue)
 	* [Linked Stack](#linked-stack)
-  * Tree
+  * Binary Tree
+    * Binary Tree
+    * Binary Search Tree
+    * Scapegoat Tree
+    * Red-Black Tree
+    * Heap
   * Graph
 * [Algorithms](#algorithms)
+  * [Sorting Algorithms](#sorting-algorithms)
+    * [Insertion-Sort](#insertion-sort)
+    * [Merge-Sort](#merge-sort)
+    * [Quick-Sort](#quick-sort)
+    * [Heap-Sort](#heap-sort)
+	
 * [Contributing to node-ds](#contributing-to-node-ds)
 
 ## Data Structures
 
 ### Linear
+
+#### Array
 
 #### Linked List
 
@@ -123,3 +137,20 @@ The size of queue
 ##### Node
  * `next` Node
  * `val` any
+
+
+## Algorithms
+
+### Sorting Algorithms
+
+#### Insertion-Sort
+
+
+#### Merge-Sort
+
+
+#### Quick-Sort
+
+
+#### Heap-Sort
+
