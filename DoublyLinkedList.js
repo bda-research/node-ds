@@ -106,7 +106,9 @@ module.exports = class DoublyLinkedList{
     }
 
     clear(){
-	while(this.deleteLast());
+	while(this._size){
+	    this.deleteLast();
+	}
     }
 }
 

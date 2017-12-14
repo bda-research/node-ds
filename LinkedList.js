@@ -93,7 +93,9 @@ module.exports = class LinkedList{
     }
 
     clear(){
-	while(this.deleteFirst());
+	while(this._size){
+	    this.deleteFirst();
+	}
     }
 }
 
