@@ -19,10 +19,10 @@ A common data-structure and basic algorithm implemention in javascript
   * Graph
 * [Algorithms](#algorithms)
   * [Sorting Algorithms](#sorting-algorithms)
-    * [Insertion-Sort](#insertion-sort)
-    * [Merge-Sort](#merge-sort)
-    * [Quick-Sort](#quick-sort)
-    * [Heap-Sort](#heap-sort)
+    * [Insertion-Sort](#sorting-algorithms)
+    * [Merge-Sort](#sorting-algorithms)
+    * [Quick-Sort](#sorting-algorithms)
+    * [Heap-Sort](#sorting-algorithms)
 	
 * [Contributing to node-ds](#contributing-to-node-ds)
 
@@ -143,14 +143,39 @@ The size of queue
 
 ### Sorting Algorithms
 
-#### Insertion-Sort
+Sort the given array in ascending order, which is numerical order for number, alphabetic order for string. For array consisting of other data types, or if a customed order is prefered, a compare funtion must be specified. All sorting algorithms follow the same API. Check it out below.
 
+* SortFamily
+  * SortFamily.insertionSort(array[, compare[, lo, hi]]) or SortFamily.insertionSort(array[, lo, hi])
+  * SortFamily.mergeSort(array[, compare[, lo, hi]]) or SortFamily.mergeSort(array[, lo, hi])
+  * SortFamily.quickSort(array[, compare[, lo, hi]]) or SortFamily.quickSort(array[, lo, hi])
+  * SortFamily.heapSort(array[, compare[, lo, hi]]) or SortFamily.heapSort(array[, lo, hi])
+  * `options`:
+    * array: array to sort, must be javascript `Array` object
+    * compare: optional, a function(@return 1 or -1 or 0) telling in what order an element should be sorted. If `compare(a, b) > 0`, a will be placed after b, vice versa. If `compare(a, b) = 0`, the order of a and b will depend on the sorting algorithm. If `compare` is not specified, numbers will be sorted in numerical order, strings will be sorted in alphabetic order(according to gb2312 code point, if string cannot be encoded with gb2312, an error will be thrown)
+    * lo: optional, default `0`
+    * hi: optional, default `array.length - 1`
 
-#### Merge-Sort
+Check some examples out below:
 
+<pre><code>
+const SortFamily = require('node-ds/SortFamily.js');
+const Random = require('node-ds/Random.js');
 
-#### Quick-Sort
+let a = [5,7,8,9,1,3,2,4,6];
+function compare(a, b) {
+    if (a > b) return -1;
+    if (b > a) return 1;
+    return 0;
+}
 
+SortFamily.insertionSort(a); // outputs [1, 2, 3, 4, 5, 6, 7, 8, 9]
 
-#### Heap-Sort
+SortFamily.insertionSort(a, compare); // outputs [9, 8, 7, 6, 5, 4, 3, 2, 1]
 
+Random.shuffle(a); // say [6, 7, 9, <b>2, 3, 5, 1</b>, 8, 4]
+SortFamily.insertionSort(a, 3, 6); // outputs [6, 7, 9, <b>1, 2, 3, 5</b>, 8, 4]
+
+Random.shuffle(a); // say [6, 9, 3, <b>1, 4, 2, 8</b>, 5, 7]
+SortFamily.insertionSort(a, compare, 3, 6); // outputs [6, 9, 3, <b>8, 4, 2, 1</b>, 5, 7]
+</code></pre>

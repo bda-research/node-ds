@@ -4,7 +4,7 @@ module.exports = {
     insertionSort: function() {
         let [a, less, from, to] = this.parseArguments(arguments);
         for (let i = from; i <= to; i++) {
-            for (let j = i; j > 0; j--) {
+            for (let j = i; j > from; j--) {
                 if (less(a[j], a[j - 1])) {
                     this.swap(a, j, j - 1);
                 } else {
