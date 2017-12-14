@@ -43,7 +43,7 @@ module.exports = class DoublyLinkedList{
 
     deleteLast(){
 	if(null === this.tail){
-	    return null;
+	    throw new Error("InvalidOperation, the list is empty.");
 	}
 
 	let n = this.tail;
@@ -61,7 +61,7 @@ module.exports = class DoublyLinkedList{
 
     deleteFirst(){
 	if(null === this.head){
-	    return null;
+	    throw new Error("InvalidOperation, the list is empty.");
 	}
 
 	let n = this.head;
