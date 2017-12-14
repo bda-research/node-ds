@@ -28,8 +28,8 @@ class Random {
             a[j] = swap;
         }
 
-        for (let i = 0; i < a.length; i++) {
-            let r = i + Math.floor(Math.random()*(a.length - i));
+        for (let i = from; i <= to; i++) {
+            let r = i + Math.floor(Math.random()*(to + 1 - i));
             swap(a, i, r);
         }
     }
