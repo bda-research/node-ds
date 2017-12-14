@@ -1,3 +1,17 @@
+[![npm package](https://nodei.co/npm/node-ds.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/node-ds/)
+
+[![build status](https://secure.travis-ci.org/bda-research/node-ds.png)](https://travis-ci.org/bda-research/node-ds)
+[![Coverage Status](https://coveralls.io/repos/github/bda-research/node-ds/badge.svg?branch=master)](https://coveralls.io/github/bda-research/node-ds?branch=master)
+[![Dependency Status](https://david-dm.org/bda-research/node-ds/status.svg)](https://david-dm.org/bda-research/node-ds)
+[![NPM download][download-image]][download-url]
+[![NPM quality][quality-image]][quality-url]
+
+[quality-image]: http://npm.packagequality.com/shield/node-ds.svg?style=flat-square
+[quality-url]: http://packagequality.com/#?package=node-ds
+[download-image]: https://img.shields.io/npm/dm/node-ds.svg?style=flat-square
+[download-url]: https://npmjs.org/package/node-ds
+
+
 # node-ds
 A common data-structure and basic algorithm implemention in javascript
 
