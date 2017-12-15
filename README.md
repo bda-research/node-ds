@@ -39,7 +39,7 @@ A common data-structure and basic algorithm implemention in javascript
     * [Merge-Sort](#sorting-algorithms)
     * [Quick-Sort](#sorting-algorithms)
     * [Heap-Sort](#sorting-algorithms)
-	
+* [Test](#test)
 * [Contributing to node-ds](#contributing-to-node-ds)
 
 ## Quick Start
@@ -205,5 +205,12 @@ Random.shuffle(a); // say [6, 9, 3, <b>1, 4, 2, 8</b>, 5, 7]
 SortFamily.insertionSort(a, compare, 3, 6); // outputs [6, 9, 3, <b>8, 4, 2, 1</b>, 5, 7]
 </code></pre>
 
+## Test
+Like most other packages, just run test suite and check code coverage by following commands:
+
+```bash
+$ npm test
+$ npm run cover
+```
 
 ## Contributing to node-ds
