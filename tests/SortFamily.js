@@ -1,3 +1,6 @@
+
+'use strict'
+
 const SortFamily = require('../SortFamily.js');
 const Random = require('../Random.js');
 

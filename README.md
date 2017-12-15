@@ -17,6 +17,8 @@ A common data-structure and basic algorithm implemention in javascript
 
 # Table of Contents
 
+* [Quick Start](#quick-start)
+  * [Installation](#installation)
 * [Data Structures](#data-structures)
   * [Linear](#linear)
     * [Array](#array)
@@ -39,6 +41,15 @@ A common data-structure and basic algorithm implemention in javascript
     * [Heap-Sort](#sorting-algorithms)
 	
 * [Contributing to node-ds](#contributing-to-node-ds)
+
+## Qick Start
+
+### Installation
+Installation is done using the npm install command:
+
+```bash
+$ npm install express
+```
 
 ## Data Structures
 
@@ -193,3 +204,6 @@ SortFamily.insertionSort(a, 3, 6); // outputs [6, 7, 9, <b>1, 2, 3, 5</b>, 8, 4]
 Random.shuffle(a); // say [6, 9, 3, <b>1, 4, 2, 8</b>, 5, 7]
 SortFamily.insertionSort(a, compare, 3, 6); // outputs [6, 9, 3, <b>8, 4, 2, 1</b>, 5, 7]
 </code></pre>
+
+
+## Contributing to node-ds

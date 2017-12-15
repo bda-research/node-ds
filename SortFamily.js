@@ -1,3 +1,6 @@
+
+'use strict'
+
 const Random = require('./Random.js');
 
 module.exports = {
