@@ -42,7 +42,7 @@ A common data-structure and basic algorithm implemention in javascript
 	
 * [Contributing to node-ds](#contributing-to-node-ds)
 
-## Qick Start
+## Quick Start
 
 ### Installation
 Installation is done using the npm install command:
