@@ -1,10 +1,12 @@
 {
   "name": "node-ds",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "A common data-structure and basic algorithm implemention in javascript",
   "main": "index.js",
   "scripts": {
-    "test": "node tests/*.js"
+    "hint": "jshint *.js",
+    "test": "mocha tests/*.js",
+    "cover": "istanbul cover node_modules/mocha/bin/_mocha --report lcovonly -- --reporter spec tests/*"
   },
   "repository": {
     "type": "git",
@@ -25,5 +27,12 @@
   "bugs": {
     "url": "https://github.com/bda-research/node-ds/issues"
   },
-  "homepage": "https://github.com/bda-research/node-ds#readme"
+  "homepage": "https://github.com/bda-research/node-ds#readme",
+  "devDependencies": {
+    "coveralls": "^3.0.0",
+    "jshint": "^2.9.5",
+    "mocha": "^4.0.1",
+    "mocha-lcov-reporter": "^1.3.0",
+    "should": "^13.1.3"
+  }
 }

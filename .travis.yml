@@ -1,9 +1,15 @@
 language: node_js
 node_js:
-  - 4.6.2
-  - 6.9.1
-  - 6.10.2
-  - 7.8.0
+  - 4
+  - 6
+  - 6
+  - 9
 os:
   - linux
   - osx
+
+script:
+  - "npm run hint"
+  - "npm run test"
+  - "npm run cover"
+after_script: "cat ./coverage/lcov.info | coveralls"

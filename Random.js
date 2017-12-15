@@ -11,10 +11,12 @@ class Random {
 
         switch (arguments.length) {
             case 1:
-                from = 0, to = a.length - 1;
+                from = 0;
+                to = a.length - 1;
                 break;
             case 3:
-                from = arguments[1], to = arguments[2];
+                from = arguments[1];
+                to = arguments[2];
                 break;
             default:
                 throw new Error('Random.shuffle - IllegalArgument: please follow Random.shuffle(array(, from, to)?');

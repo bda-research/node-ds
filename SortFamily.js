@@ -138,13 +138,22 @@ module.exports = {
 
         switch (args.length) {
             case 1:
-                from = 0, to = a.length - 1;break;
+                from = 0;
+                to = a.length - 1;
+                break;
             case 2:
-                compare = args[1], from = 0, to = a.length - 1;break;
+                compare = args[1];
+                from = 0;
+                to = a.length - 1;
+                break;
             case 3:
-                from = args[1], to = args[2];break;
+                from = args[1]; 
+                to = args[2];
+                break;
             case 4:
-                compare = args[1], from = args[2], to = args[3];break;
+                compare = args[1]; 
+                from = args[2];
+                to = args[3];break;
             default:
                 throw new Error('IllegalArgument: please follow sort(array(, compare)?(, from, to)?');
         }
@@ -153,7 +162,7 @@ module.exports = {
     
         compare = this.getCompareFn(compare, a[0]);
 
-        less = function(a, b) {
+        let less = function(a, b) {
             if (compare(a, b) < 0) return true;
             return false;
         }

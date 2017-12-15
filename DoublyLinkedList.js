@@ -3,112 +3,112 @@
 
 module.exports = class DoublyLinkedList{
     constructor(){
-	this._size = 0;
-	this.head = this.tail = null;
+		this._size = 0;
+		this.head = this.tail = null;
     }
 
     insertStartNode(node){
-	if(null === this.head){
+		if(null === this.head){
             this.head = this.tail = node;
-	}else{
+		}else{
             node.next = this.head;
             this.head.prev = node;
             this.head = node;
-	}
+		}
 
-	++this._size;
-	return this;
+		++this._size;
+		return this;
     }
     
     insertEndNode(node){
-	if(null === this.head){
-	    this.head = this.tail = node;
-	}else{
-	    this.tail.next = node;
-	    node.prev = this.tail;
-	    this.tail = node;
-	}
+		if(null === this.head){
+			this.head = this.tail = node;
+		}else{
+			this.tail.next = node;
+			node.prev = this.tail;
+			this.tail = node;
+		}
 
-	++this._size;
-	return this;
+		++this._size;
+		return this;
     }
 
     insertStart(val){
-	return this.insertStartNode( _node(val) );
+		return this.insertStartNode( _node(val) );
     }
 
     insertEnd(val){
-	return this.insertEndNode( _node(val) );
+		return this.insertEndNode( _node(val) );
     }
 
     deleteLast(){
-	if(null === this.tail){
-	    throw new Error("InvalidOperation, the list is empty.");
-	}
+		if(null === this.tail){
+			throw new Error("InvalidOperation, the list is empty.");
+		}
 
-	let n = this.tail;
-	this.tail = this.tail.prev;
-	if(this.tail){
+		let n = this.tail;
+		this.tail = this.tail.prev;
+		if(this.tail){
             this.tail.next = null;
-	}else{
+		}else{
             this.head = null;
-	}
-	
-	n.prev = null;
-	--this._size;
-	return n;
+		}
+		
+		n.prev = null;
+		--this._size;
+		return n;
     }
 
     deleteFirst(){
-	if(null === this.head){
-	    throw new Error("InvalidOperation, the list is empty.");
-	}
+		if(null === this.head){
+			throw new Error("InvalidOperation, the list is empty.");
+		}
 
-	let n = this.head;
-	this.head = this.head.next;
-	if(this.head){
-	    this.head.prev = null;
-	}else{
-	    this.tail = null;
-	}
+		let n = this.head;
+		this.head = this.head.next;
+		if(this.head){
+			this.head.prev = null;
+		}else{
+			this.tail = null;
+		}
 
-	n.next = null;
-	--this._size;
-	return n;
+		n.next = null;
+		--this._size;
+		return n;
     }
     
     traverse(fn){
-	let tmp = this.head, rstArray = [];
-	while(tmp){
-            rstArray.push( fn?fn(tmp):tmp );
+		let tmp = this.head, rstArray = [];
+		while(tmp){
+            rstArray.push( fn?fn(tmp.val):tmp.val );
             tmp = tmp.next;
-	}
-	
-	return rstArray;
+		}
+		
+		return rstArray;
     }
 
     // [Symbol.iterator]() {
     // 	let tmp = this.head;
     // 	return {
     // 	    next:()=>{
-		
+	
     // 		return {done: true}
     // 	    }
     // 	};
     // }
     
     get length(){
-	return this._size;
+		return this._size;
     }
     
     toString(){
-	return this.traverse(n=>n.val).join(" <-> ");
+		return this.traverse().join(" <-> ");
     }
 
     clear(){
-	while(this._size){
-	    this.deleteLast();
-	}
+		while(this._size){
+			this.deleteLast();
+		}
     }
 }
 
