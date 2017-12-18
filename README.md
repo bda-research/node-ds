@@ -48,7 +48,7 @@ A common data-structure and basic algorithm implemention in javascript
 Installation is done using the npm install command:
 
 ```bash
-$ npm install express
+$ npm install node-ds
 ```
 
 ## Data Structures
