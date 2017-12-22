@@ -18,6 +18,7 @@ module.exports = class LinkedList{
     insertEndNode(node){
 		if(null === this.head){
 			this.head = node;
+			++this._size;
 			return this;
 		}
 		
@@ -32,11 +33,11 @@ module.exports = class LinkedList{
     }
 
     insertStart(val){
-		return this.insertStartNode( _node(val) );
+		return this.insertStartNode( new Node(val) );
     }
 
     insertEnd(val){
-		return this.insertEndNode( _node(val) );
+		return this.insertEndNode( new Node(val) );
     }
 
     deleteFirst(){
@@ -61,6 +62,7 @@ module.exports = class LinkedList{
 		
 		if(null === p2){
 			this.head = null;
+			--this._size;
 			return p1;
 		}
 		
@@ -71,7 +73,7 @@ module.exports = class LinkedList{
 
 		p1.next = null;
 		--this._size;
-		return p1;
+		return p2;
     }
     
     get length(){
@@ -99,10 +101,7 @@ module.exports = class LinkedList{
     }
 }
 
-function _node(value){
-    let n = Object.create(null);
-    n.next = null;
-    n.val = value;
-
-    return n;
+function Node(value){
+	this.next = null;
+	this.val = value;
 }

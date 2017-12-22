@@ -34,13 +34,54 @@ module.exports = class DoublyLinkedList{
     }
 
     insertStart(val){
-		return this.insertStartNode( _node(val) );
+		return this.insertStartNode( new Node(val) );
     }
 
     insertEnd(val){
-		return this.insertEndNode( _node(val) );
+		return this.insertEndNode( new Node(val) );
     }
 
+	delete(node){
+		if(this.head === node){
+			this.deleteFirst();
+		}else if(this.tail === node){
+			this.deleteLast();
+		}else{
+			node.prev.next = node.next;
+			node.next.prev = node.prev;
+			node.next = node.prev = null;
+			--this._size;
+		}
+	}
+
+	insertBefore(target, node){
+		node.next = target;
+		node.prev = target.prev;
+		target.prev = node;
+
+		if(target !== this.head){
+			node.prev.next = node;
+		}else{
+			this.head = node;
+		}
+
+		++this._size;
+	}
+	
+	insertAfter(target, node ){
+		node.next = target.next;
+		node.prev = target;
+		target.next = node;
+		
+		if(target !== this.tail){
+			node.next.prev = node;
+		}else{
+			this.tail = node;
+		}
+
+		++this._size;
+	}
+	
     deleteLast(){
 		if(null === this.tail){
 			throw new Error("InvalidOperation, the list is empty.");
@@ -112,11 +153,8 @@ module.exports = class DoublyLinkedList{
     }
 }
 
-function _node(value){
-    let n = Object.create(null);
-    n.next = null;
-    n.prev = null;
-    n.val = value;
-
-    return n;
+function Node(value){
+    this.next = null;
+    this.prev = null;
+    this.val = value;
 }

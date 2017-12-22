@@ -2,7 +2,6 @@
 'use strict'
 
 const should = require('should');
-
 const LinkedQueue = require('../LinkedQueue.js');
 
 let ts = function(){return this.name;};
@@ -29,14 +28,14 @@ describe("Linked Queue", function(){
 		q.length.should.be.equal(eles.length);
 	});
 
-	it('should add node at the end of the queue when enqueue() is called', function(){
+	it('should add element at the end of the queue when enqueue() is called', function(){
 		q.enqueue(1);
 		q.peek().should.be.equal(1);
 		q.enqueue(2);
 		q.peek().should.be.equal(1);
 	});
 	
-	it('should delete and return node at the beginning of the queue when dequeue() is called ', function(){
+	it('should delete and return element at the beginning of the queue when dequeue() is called ', function(){
 		q.enqueue(1);
 		q.enqueue(2);
 
@@ -86,5 +85,18 @@ describe("Linked Queue", function(){
 
 	it('should return itself to support calling chain when enqueue() is called', function(){
 		q.enqueue(1).should.be.eql(q);
+	});
+
+	it('should return the first element when peek() is called', function(){
+		let eles = ["m", "n", "o", "p"];
+		for(let ele of eles)
+			q.enqueue(ele);
+		
+		q.length.should.be.equal(eles.length);
+
+		for(let i=0; q.length;i++){
+			should.equal(q.peek(), eles[i]);
+			q.dequeue();
+		}
 	});
 });
