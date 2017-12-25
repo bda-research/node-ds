@@ -4,6 +4,8 @@ module.exports = class Grubbs {
     constructor(data, alpha) {
         if (!(data instanceof Array)) {
             throw new Error('data must be an array');
+        } else if (data.length < 3) {
+            throw new Error('data length must be at least 3');
         }
         this.data = data;
         this.alpha = alpha || 0.05;
