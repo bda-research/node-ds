@@ -26,9 +26,9 @@ A common data-structure and basic algorithm implemention in javascript
 	* [Doubly Linked List](#doubly-linked-list)
 	* [Linked Queue](#linked-queue)
 	* [Linked Stack](#linked-stack)
-  * Binary Tree
-    * Binary Tree
-    * Binary Search Tree
+  * [Trees](#trees)
+    * [Binary Tree](#binary-tree)
+    * [Binary Search Tree](#binary-search-tree)
     * Scapegoat Tree
     * Red-Black Tree
     * Heap
@@ -163,6 +163,43 @@ The size of queue
  * `next` Node
  * `val` any
 
+### Trees
+
+#### Binary  Tree
+
+Unlike List, Queue, Stack and Hashtable, binary trees store data in a non-linear fashion and is a special kind of tree, on in which all nodes have at most two children, left and right.
+
+##### *inOrder()
+Inorder traversal starts by visiting the current node's left child, then the current node, and then its right child.
+
+##### *preOrder()
+Preorder traversal starts by visiting the current node, then its left child, and then its right child.
+
+##### *postOrder()
+Postorder traversal starts by visiting the current node's left child, then its right child, and finally the current node itself.
+
+##### *levelOrder()
+Levelorder traversal starts by visiting the current node and nodes in the same height, from left to right.
+
+##### clear()
+Remove _root reference in binary tree.
+
+##### root
+Get or set the root node of the binary tree
+
+#### Binary Search Tree
+A binary search tree is a special kind of binary tree, for node n , every descendant node's value in left subtree is less than the value of n, and every descendant nodes' value in the right subtree is greater than the value of n.
+
+##### add(val)
+ * `val` any
+Insert value according to the rule of BST.
+
+##### delete(val)
+ * `val` any
+
+##### has(val)
+ * `val` any
+Return true or false if exist value.
 
 ## Algorithms
 

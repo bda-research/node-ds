@@ -6,6 +6,16 @@ const BinaryTree = require('../BinaryTree');
 
 let tree = null;
 
+const construct = function(tree){
+	tree.root = BinaryTree.Node(5);
+	tree.root.left = BinaryTree.Node(3);
+	tree.root.right = BinaryTree.Node(7);
+	tree.root.left.left = BinaryTree.Node(2);
+	tree.root.left.right = BinaryTree.Node(4);
+	tree.root.right.left = BinaryTree.Node(6);
+	tree.root.right.right = BinaryTree.Node(8);
+}
+
 describe("Binary Tree", function(){
 	beforeEach(() => {
 		tree = new BinaryTree();
@@ -36,25 +46,15 @@ describe("Binary Tree", function(){
 	 *                            8         9
 	 *
 	 */
-	it('should construct from root with pre-order and be same with preOrder() output', function(){
-		let prev = null, arr = [1,2,3,4,5,6,7,8,9];
-		for( let n of arr){
-			let node = BinaryTree.Node(n);
-			
-			if(!prev){
-				tree.root = node;
-				prev = node;
-			}else if(!prev.left){
-				prev.left = node;
-			}else if(!prev.left){
-				prev.right = node;
-				prev = node;
-			}
-		}
+	it('should traverse `current`, `left` and `right` order when preOrder() is called', function(){
+		construct(tree);
+		let arr = [5, 3, 2, 4, 7, 6, 8];
 		
-		BinaryTree.preOrder(tree, n=>{
-			should.equal(arr.shift(), n.val);
-		});
+		[...tree.preOrder()].should.be.eql(arr);
+		
+		for(let ele of tree.preOrder()){
+			should.equal(ele, arr.shift());
+		}
 	});
 
 	/*                 1
@@ -88,11 +88,38 @@ describe("Binary Tree", function(){
 		}
 
 		buildFullBinaryTree(arr);
-		BinaryTree.levelOrder(tree, n=>{
-			should.equal(arr.shift(), n.val);
-		});
+		
+		[...tree.levelOrder()].should.be.eql(arr);// support extended function
+		
+		for(let ele of tree.levelOrder()){// support for...of loop
+			should.equal(ele, arr.shift());
+		}
 	});
 
+	it('should traverse `left`, `current` and `right` order when inOrder() is called', function(){
+		construct(tree);
+
+		let arr = [2,3,4,5,6,7,8];
+		
+		[...tree.inOrder()].should.be.eql(arr);
+		
+		for(let ele of tree.inOrder()){
+			ele.should.be.equal(arr.shift());
+		}
+	});
+
+	it('should traverse `left`, `right` and `current` order when postOrder() is called', function(){
+		construct(tree);
+		
+		let arr = [2,4,3,6,8,7,5];
+		
+		[...tree.postOrder()].should.be.eql(arr);
+		
+		for(let ele of tree.postOrder()){
+			ele.should.be.equal(arr.shift());
+		}
+	});
+	
 	it('should delete when clear() is called', function(){
 		tree.root = BinaryTree.Node(1);
 		should.exist(tree.root);

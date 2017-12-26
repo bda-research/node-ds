@@ -19,28 +19,28 @@ function BinaryTreeNode(value){
 
 module.exports = class BinaryTree{
     constructor(){
-		this.root = null;
+		this._root = null;
     }
 
 	static Node(value){
 		return new BinaryTreeNode(value);
 	}
 	
-	static inOrder(tree, fn){
-		return _inOrder(tree.root, fn);
+	*inOrder(){
+		yield* _inOrder(this._root);
 	}
 
-	static preOrder(tree, fn){
-		return _preOrder(tree.root, fn);
+	*preOrder(){
+		yield* _preOrder(this._root);
 	}
 
-	static postOrder(tree, fn){
-		return _postOrder(tree.root, fn);
+	*postOrder(){
+		yield* _postOrder(this._root);
 	}
 
-	static levelOrder(tree, fn){
+	*levelOrder(){
 		let queue = new Queue(), node = null;
-		queue.enqueue(tree.root);
+		queue.enqueue(this._root);
 		
 		while( queue.length > 0 ){
 			node = queue.dequeue();
@@ -50,7 +50,7 @@ module.exports = class BinaryTree{
 			if(node.right)
 				queue.enqueue(node.right);
 
-			fn(node);
+			yield node.val;
 		}
 	}
 
@@ -85,34 +85,42 @@ module.exports = class BinaryTree{
 	}
 	
     clear(){
-		this.root = null;
+		this._root = null;
     }
+
+	get root(){
+		return this._root;
+    }
+
+	set root(value){
+		this._root = value;
+	}
 }
 
-function _inOrder(node, fn){
+function *_inOrder(node){
 	if(null === node)
 		return;
 	
-	_inOrder(node.left, fn);
-	fn(node);
-	_inOrder(node.right, fn);
+	yield* _inOrder(node.left);
+	yield node.val;
+	yield* _inOrder(node.right);
 }
 
-function _preOrder(node, fn){
+function *_preOrder(node){
 	if(null === node)
 		return;
 
-	fn(node);
-	_preOrder(node.left, fn);
-	_preOrder(node.right, fn);
+	yield node.val;
+	yield* _preOrder(node.left);
+	yield* _preOrder(node.right);
 }
 
-function _postOrder(node, fn){
+function *_postOrder(node){
 	if(null === node)
 		return;
 	
-	_postOrder(node.left, fn);
-	_postOrder(node.right, fn);
-	fn(node);
+	yield* _postOrder(node.left);
+	yield* _postOrder(node.right);
+	yield node.val;
 }
 
