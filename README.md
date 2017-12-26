@@ -39,6 +39,8 @@ A common data-structure and basic algorithm implemention in javascript
     * [Merge-Sort](#sorting-algorithms)
     * [Quick-Sort](#sorting-algorithms)
     * [Heap-Sort](#sorting-algorithms)
+  * [Statistics Algorithms](#statistics-algorithms)
+    * [Grubbs](#grubbs)
 * [Test](#test)
 * [Contributing to node-ds](#contributing-to-node-ds)
 
@@ -241,6 +243,19 @@ SortFamily.insertionSort(a, 3, 6); // outputs [6, 7, 9, <b>1, 2, 3, 5</b>, 8, 4]
 Random.shuffle(a); // say [6, 9, 3, <b>1, 4, 2, 8</b>, 5, 7]
 SortFamily.insertionSort(a, compare, 3, 6); // outputs [6, 9, 3, <b>8, 4, 2, 1</b>, 5, 7]
 </code></pre>
+
+### Statistics Algorithms
+
+Find out outliers from the given data array based on some basic mathematical calculation(average、stdev).
+
+#### Grubbs
+```javascript
+const Grubbs = require('node-ds/Grubbs.js');
+
+let data = [7, 9, 2, 6, 3, 5, 7, 2, 4, 20];
+let grubbs = new Grubbs(data);
+grubbs.getOutliers();//outputs [9], means the number 20 is outlier
+```
 
 ## Test
 Like most other packages, just run test suite and check code coverage by following commands:
