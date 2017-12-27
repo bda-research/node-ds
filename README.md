@@ -75,6 +75,7 @@ Returns the deleted node.
 
 ##### traverse(fn)
  * `fn` Function
+
 Apply fn to each node, and returns an array of elements returned by fn.
 
 ##### length
@@ -101,11 +102,13 @@ Queue implemented by DoublyLinkedList
 
 ##### enqueueNode(node)
  * `node` [DoublyNode](#DoublyNode)
- Adds a node to the end of the Queue.
+
+Adds a node to the end of the Queue.
  
 ##### enqueue(val)
  * `val` any
- Adds an element to the end of the Queue.
+
+Adds an element to the end of the Queue.
 
 ##### dequeueNode()
 Removes and returns the node<[DoublyNode](#DoublyNode)> at the beginning of the Queue.
@@ -115,6 +118,7 @@ Removes and returns the element at the beginning of the Queue.
 
 ##### traverse(fn)
 * `fn` Function
+
 Apply fn to each node, and returns an array of elements returned by fn.
 
 ##### peek()
@@ -141,7 +145,7 @@ Stack implemented by DoublyLinkedList
  * `val` any
  
 ##### popNode()
-Removes and returns the node<[DoublyNode](#DoublyNode)> at the top of the Stack.
+Removes and returns the [node](#DoublyNode) at the top of the Stack.
 
 ##### pop()
 Removes and returns the element at the top of the Stack.
@@ -194,6 +198,7 @@ A binary search tree is a special kind of binary tree, for node n , every descen
 
 ##### add(val)
  * `val` any
+
 Insert value according to the rule of BST.
 
 ##### delete(val)
@@ -201,6 +206,7 @@ Insert value according to the rule of BST.
 
 ##### has(val)
  * `val` any
+
 Return true or false if exist value.
 
 ## Algorithms
