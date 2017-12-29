@@ -42,7 +42,7 @@ module.exports = class BinaryTree{
 		let queue = new Queue(), node = null;
 		queue.enqueue(this._root);
 		
-		while( queue.length > 0 ){
+		while( queue.length ){
 			node = queue.dequeue();
 			if(node.left)
 				queue.enqueue(node.left);
@@ -62,7 +62,22 @@ module.exports = class BinaryTree{
 			return 0;
 		}
 
+		let queue = new Queue(), e = null;
+		queue.enqueue({depth:0, node: this._root});
 		
+		while( queue.length ){
+			e = queue.dequeue();
+			
+			if(val === e.node.val){
+				return e.depth;
+			}
+			
+			if(e.node.left)
+				queue.enqueue({node: e.node.left, depth:e.depth + 1});
+
+			if(e.node.right)
+				queue.enqueue({node: e.node.right, depth:e.depth + 1});
+		}
 	}
 	
 	/*
@@ -71,19 +86,11 @@ module.exports = class BinaryTree{
 	height(){
 		
 	}
-	
-    toString(){
-
-    }
 
 	toArray(){
-		
+		return [..._inOrder(this._root)];
 	}
 
-	toList(){
-		
-	}
-	
     clear(){
 		this._root = null;
     }

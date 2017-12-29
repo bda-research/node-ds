@@ -119,6 +119,18 @@ describe("Binary Tree", function(){
 			ele.should.be.equal(arr.shift());
 		}
 	});
+
+	it('should return the number of edges from the root to the node', function(){
+		construct(tree);
+
+		tree.depth(tree.root.val).should.be.equal(0);
+		tree.depth(tree.root.left.val).should.be.equal(1);
+		tree.depth(tree.root.right.val).should.be.equal(1);
+		tree.depth(tree.root.left.left.val).should.be.equal(2);
+		tree.depth(tree.root.left.right.val).should.be.equal(2);
+		tree.depth(tree.root.right.left.val).should.be.equal(2);
+		tree.depth(tree.root.right.right.val).should.be.equal(2);
+	});
 	
 	it('should delete when clear() is called', function(){
 		tree.root = BinaryTree.Node(1);
