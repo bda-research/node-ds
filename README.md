@@ -33,6 +33,10 @@ A common data-structure and basic algorithm implemention in javascript
     * Red-Black Tree
     * Heap
   * Graph
+  * [Others](#others)
+    * [Node](#node)
+	* [DoublyNode](#node)
+	* [BinaryTreeNode](#binarytreenode)
 * [Algorithms](#algorithms)
   * [Sorting Algorithms](#sorting-algorithms)
     * [Insertion-Sort](#sorting-algorithms)
@@ -111,7 +115,7 @@ Adds a node to the end of the Queue.
 Adds an element to the end of the Queue.
 
 ##### dequeueNode()
-Removes and returns the node<[DoublyNode](#DoublyNode)> at the beginning of the Queue.
+Removes and returns the [node](#DoublyNode) at the beginning of the Queue.
 
 ##### dequeue()
 Removes and returns the element at the beginning of the Queue.
@@ -159,15 +163,6 @@ Removes all elements from the Stack.
 ##### length
 The size of queue
 
-#### Others
-##### DoublyNode
- * `prev` DoublyNode
- * `next` DoublyNode
- * `val` any
-
-##### Node
- * `next` Node
- * `val` any
 
 ### Trees
 
@@ -208,6 +203,21 @@ Insert value according to the rule of BST.
  * `val` any
 
 Return true or false if exist value.
+
+### Others
+#### Node
+ * `next` Node
+ * `val` any
+
+#### DoublyNode
+ * `prev` DoublyNode
+ * `next` DoublyNode
+ * `val` any
+
+#### BinaryTreeNode
+ * `left` BinaryTreeNode
+ * `right` BinaryTreeNode
+ * `val` any
 
 ## Algorithms
 
