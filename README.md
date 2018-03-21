@@ -28,10 +28,20 @@ A common data-structure and basic algorithm implemention in javascript
 	* [Linked Stack](#linked-stack)
   * [Trees](#trees)
     * [Binary Tree](#binary-tree)
-    * [Binary Search Tree](#binary-search-tree)
-    * Scapegoat Tree
-    * Red-Black Tree
+      * [Binary Search Tree](#binary-search-tree)
+      * Self-balancing binary search tree
+      * AVL Tree
+      * [Scapegoat Tree](#scapegoat-tree)
+      * Red-Black Tree
+	* B-trees
+	  * B+ tree
+	  * 2-3 tree
+	  * 2-3-4 tree
     * Heap
+      * Binary heap
+	  * Weak heap
+	  * Binomial heap
+	  * Fibonacci heap
   * Graph
   * [Others](#others)
     * [Node](#node)
@@ -195,6 +205,25 @@ A binary search tree is a special kind of binary tree, for node n , every descen
  * `val` any
 
 Insert value according to the rule of BST.
+
+##### delete(val)
+ * `val` any
+
+##### has(val)
+ * `val` any
+
+Return true or false if exist value.
+
+#### Scapegoat Tree
+A scapegoat tree is a self-balancing binary search tree. Instead of the small incremental rebalancing operations used by most balanced tree algorithms, scapegoat trees rarely but expensively choose a "scapegoat" and completely rebuild the subtree rooted at the scapegoat into a complete binary tree. Thus, scapegoat trees have O(n) worst-case update performance.
+
+##### contructor(alpha = 0.667)
+ * `alpha` Number
+
+α should be 0.5 < α < 1.A high α value results in fewer balances, making insertion quicker but lookups and deletions slower, and vice versa for a low α. Therefore in practical applications, an α can be chosen depending on how frequently these actions should be performed.
+
+##### add(val)
+ * `val` any
 
 ##### delete(val)
  * `val` any
