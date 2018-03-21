@@ -37,11 +37,7 @@ function parseArguments(args) {
 
     compare = getCompareFn(compare, a[0]);
 
-    var less = function(a, b) {
-        if (compare(a, b) < 0) return true;
-        return false;
-    }
-    return [a, less, from, to];
+    return [a, compare, from, to];
 }
 
 function getCompareFn(compare, comparable) {
@@ -53,7 +49,7 @@ function getCompareFn(compare, comparable) {
         case 'number':
             return numberCompareFn;
         case 'string':
-            return stringCompareFn.bind(this);
+            return stringCompareFn;
         default:
             throw new Error('IllegalArgument: must specify compare function when elements of array are neither number nor string');
     }
@@ -100,137 +96,236 @@ function swap(a, i, j) {
     a[j] = temp;
 }
 
-module.exports = {
-    insertionSort: function() {
-        var [a, less, from, to] = parseArguments(arguments);
+var insertionSort = (function() {
+    function _sort(a, compare, from, to) {
         for (var i = from; i <= to; i++) {
             for (var j = i; j > from; j--) {
-                if (less(a[j], a[j - 1])) {
+                if (compare(a[j], a[j - 1]) < 0) {
                     swap(a, j, j - 1);
                 } else {
                     break;
                 }
             }
         }
-    },
-    mergeSort: function() {
-        var [a, less, from, to] = parseArguments(arguments);
+    }
 
+    return function() {
+        var [a, compare, from, to] = parseArguments(arguments);
+        _sort(a, compare, from, to);
+    }
+})();
+
+var mergeSort = (function() {
+    /* sort the recursive way 
+    function _sort(a, aux, compare, from, to) {
+        if (to === from) return;
+        var mid = from + Math.floor((to - from) / 2);
+        _sort(a, aux, compare, from, mid);
+        _sort(a, aux, compare, mid + 1, to);
+        _merge(a, aux, compare, from, mid, to);
+    }
+    */
+
+    function _merge(a, aux, compare, from, mid, to) {
+        var i;
+        for (i = from; i <= to; i++) {
+            aux[i] = a[i];
+        }
+
+        i = from;
+        var j = mid + 1, k = from;
+        while (k <= to) {
+            if (i > mid) {
+                a[k++] = aux[j++];
+            } else if (j > to) {
+                a[k++] = aux[i++];
+            } else if (compare(aux[j], aux[i]) < 0) {
+                a[k++] = aux[j++];
+            } else {
+                a[k++] = aux[i++];
+            }
+        }
+    }
+
+    /* sort the bottom up way */
+    function _sortBottomUp(a, aux, compare, from, to) {
+        var batch = 1;
+        while (batch < to - from + 1) {
+            var i = from;
+            while (i + batch - 1 < to) {
+                _merge(a, aux, compare, i, i+batch-1, Math.min(i+2*batch-1, to));
+                i = i+2*batch;    
+            }
+            batch = batch * 2;
+        }
+    }
+
+    return function() {
+        var [a, compare, from, to] = parseArguments(arguments);
         var aux = new Array(a.length);
-        _sort(a, aux, from, to);
+        _sortBottomUp(a, aux, compare, from, to);
+    }
+})();
 
-        function _sort(a, aux, from, to) {
-            if (to === from) return;
-            var mid = from + Math.floor((to - from) / 2);
-            _sort(a, aux, from, mid);
-            _sort(a, aux, mid + 1, to);
-            _merge(a, aux, from, mid, to);
-        }
+var quickSort = (function() {
+    /* 3way quick sort(less swap version)
+     * ==<<<<????>>>>==
+    function _3waysort(a, compare, from, to) {
+        if (from >= to) return;
+        var i = _3waypartition(a, compare, from, to);
+        _3waysort(a, compare, from, i[0]);
+        _3waysort(a, compare, i[1], to);
+    }
 
-        function _merge(a, aux, from, mid, to) {
-            var i;
-            for (i = from; i <= to; i++) {
-                aux[i] = a[i];
+    function _3waypartition(a, compare, from, to) {
+        var pivot = a[to];
+        var lt = from, i = from, gt = to - 1, j = to - 1;
+        while (true) {
+            while (compare(a[lt], pivot) < 0) {lt++;}
+            while (compare(a[gt], pivot) > 0 && gt >= from) {gt--;}
+            if (lt >= gt) break;
+            swap(a, lt, gt);
+            if (compare(a[lt], pivot) === 0) {
+                swap(a, lt++, i++);
             }
-
-            i = from;
-            var j = mid + 1, k = from;
-            while (k <= to) {
-                if (i > mid) {
-                    a[k++] = aux[j++];
-                } else if (j > to) {
-                    a[k++] = aux[i++];
-                } else if (less(aux[j], aux[i])) {
-                    a[k++] = aux[j++];
-                } else {
-                    a[k++] = aux[i++];
-                }
+            if (compare(a[gt], pivot) === 0) {
+                swap(a, gt--, j--);
             }
         }
-    },
-    quickSort: function() {
-        var [a, less, from, to] = parseArguments(arguments);
-
-        Random.shuffle(a, from, to);
-        _sort(a, from, to);
-
-        function _sort(a, from, to) {
-            if (from >= to) return;
-            var [lt, gt] = _partition(a, from, to);
-            _sort(a, from, lt);
-            _sort(a, gt, to);
+        lt--;
+        gt++;
+        var k;
+        for (k = from; k < i; k++) {
+            swap(a, k, lt--);
         }
+        for (k = to; k > j; k--) {
+            swap(a, k, gt++);
+        }
+        return [lt, gt];
+    }*/
 
-        function _partition(a, from, to) {
-            var median = _getMedianOfThree(a, from, from + Math.floor((to - from) / 2), to);
-            swap(a, from, median);
+    /* 3way quick sort
+     * <<<<<==?????>>>
+    function _sort(a, compare, from, to) {
+        if (from >= to) return;
+        var i = _partition(a, compare, from, to);
+        _sort(a, compare, from, i[0]);
+        _sort(a, compare, i[1], to);
+    }
 
-            var lt = from + 1,
-                eq = from + 1,
-                gt = to;
-            while (gt >= eq) {
-                if (less(a[eq], a[from])) {
-                    swap(a, lt++, eq++)
-                } else if (less(a[from], a[eq])) {
-                    swap(a, eq, gt--);
-                } else {
-                    eq++;
-                }
+    function _partition(a, compare, from, to) {
+        var median = _getMedianOfThree(a, compare, from, from + Math.floor((to - from) / 2), to);
+        swap(a, from, median);
+
+        var pivot = a[from],
+            lt = from,
+            eq = from,
+            gt = to;
+        var cmp;
+        while (gt >= eq) {
+            cmp = compare(a[eq], pivot);
+            if (cmp < 0) {
+                swap(a, lt++, eq++)
+            } else if (cmp > 0) {
+                swap(a, eq, gt--);
+            } else {
+                eq++;
             }
-            swap(a, from, --lt);
-            return [lt - 1, eq]
         }
+        return [lt - 1, eq]
+    }
 
-        function _getMedianOfThree(a, i, j, k) {
-            if (less(a[i], a[j])) {
-                if (less(a[k], a[j])) {
-                    if (less(a[k], a[i])) {
-                        return i;
-                    } else {
-                        return k;
-                    }
+    function _getMedianOfThree(a, compare, i, j, k) {
+        if (compare(a[i], a[j]) < 0) {
+            if (compare(a[k], a[j]) < 0) {
+                if (compare(a[k], a[i]) < 0) {
+                    return i;
                 } else {
-                    return j;
+                    return k;
                 }
             } else {
-                if (less(a[k], a[i])) {
-                    if (less(a[k], a[j])) {
-                        return j;
-                    } else {
-                        return k;
-                    }
+                return j;
+            }
+        } else {
+            if (compare(a[k], a[i]) < 0) {
+                if (compare(a[k], a[j]) < 0) {
+                    return j;
                 } else {
-                    return i;
+                    return k;
                 }
+            } else {
+                return i;
             }
         }
-    },
-    heapSort: function() {
-        var [a, less, from, to] = parseArguments(arguments);
+    }*/
+    
+    function _dualPivotSort(a, compare, from, to) {
+        if (from >= to) return;
+        var i = _dualPivotPartition(a, compare, from, to);
+        _dualPivotSort(a, compare, from, i[0] - 1);
+        if (i[1] - i[0] > 1) _dualPivotSort(a, compare, i[0] + 1, i[1] - 1);
+        _dualPivotSort(a, compare, i[1] + 1, to);
+    }
 
-        buildHeap(a, from, to);
+    function _dualPivotPartition(a, compare, from, to) {
+        if (compare(a[to], a[from]) < 0) swap(a, from, to);
+        var pivot1 = a[from], pivot2 = a[to];
+        var lt = from + 1, i = from + 1, gt = to - 1;
+        while (i <= gt) {
+            if (compare(a[i], pivot1) < 0) {
+                swap(a, i++, lt++);
+            } else if (compare(pivot2, a[i]) < 0) {
+                swap(a, i, gt--);
+            } else {
+                i++;
+            }
+        }
+        swap(a, to, i);
+        swap(a, from, --lt);
+        return [lt,i];
+    }
+
+    return function() {
+        var [a, compare, from, to] = parseArguments(arguments);
+        Random.shuffle(a, from, to);
+        _dualPivotSort(a, compare, from, to);
+    }
+})();
+
+var heapSort = (function() {
+    function buildHeap(a, compare, from, to) {
+        for (var i = Math.floor((from + to - 1) / 2); i >= from; i--) {
+            sink(a, compare, i, from, to);
+        }
+    }
+
+    function sink(a, compare, i, from, to) {
+        var leftChild = from + ((i - from + 1) * 2 - 1);
+        while (leftChild <= to) {
+            if (leftChild + 1 <= to && compare(a[leftChild], a[leftChild + 1]) < 0) leftChild++;
+            if (compare(a[i], a[leftChild]) >= 0) break;
+            swap(a, i, leftChild);
+            i = leftChild;
+            leftChild = from + ((i - from + 1) * 2 - 1);
+        }
+    }
+
+    return function() {
+        var [a, compare, from, to] = parseArguments(arguments);
+
+        buildHeap(a, compare, from, to);
         for (var i = to; i >= from;) {
-            [a[from], a[i]] = [a[i], a[from]];
-            sink(a, from, from, --i);
+            swap(a, from, i);
+            sink(a, compare, from, from, --i);
         }
+    }
+})();
 
-        function buildHeap(a, from, to) {
-            for (var i = Math.floor((from + to - 1) / 2); i >= from; i--) {
-                sink(a, i, from, to);
-            }
-        }
-
-        function sink(a, i, from, to) {
-            var leftChild = from + ((i - from + 1) * 2 - 1);
-            while (leftChild <= to) {
-                if (leftChild + 1 <= to && less(a[leftChild], a[leftChild + 1])) leftChild++;
-                if (!less(a[i], a[leftChild])) break;
-                [a[i], a[leftChild]] = [a[leftChild], a[i]];
-                i = leftChild;
-                leftChild = from + ((i - from + 1) * 2 - 1);
-            }
-        }
-    },
+module.exports = {
     numberCompareFn: numberCompareFn,
-    stringCompareFn: stringCompareFn
-}
+    stringCompareFn: stringCompareFn,
+    insertionSort: insertionSort,
+    mergeSort: mergeSort,
+    quickSort: quickSort,
+    heapSort: heapSort
+};

@@ -7,13 +7,15 @@ module.exports = class Grubbs {
         } else if (data.length < 3) {
             throw new Error('data length must be at least 3');
         }
+        this.offset = 0;
         this.data = data;
         this.alpha = alpha || 0.05;
         this._preprocess();
     }
     _preprocess() {
         if (this.data.length > 100) {
-            this.data = this.data.slice(this.data.length - 100);
+            this.offset = this.data.length - 100;
+            this.data = this.data.slice(this.offset);
         }
         [this.average, this.stdev] = _stdev(this.data);
         this.criticalValue = _getCriticalValue(this.data.length, this.alpha);
@@ -22,13 +24,12 @@ module.exports = class Grubbs {
         let rst = [];
         for (let i = 0; i < this.data.length; i++) {
             if (Math.abs((this.data[i] - this.average) / this.stdev) > this.criticalValue) {
-                rst.push(i);
+                rst.push(i + this.offset);
             }
         }
         return rst;
     }
 }
-
 
 function _average(data) {
     let rst = data.reduce((pre, cur) => pre + cur);
