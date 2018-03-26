@@ -115,6 +115,10 @@ module.exports = class ScapegoatTree extends BinaryTree {
     }
 
     *levelOrder() {
+        if(!this._root){
+            return;
+        }
+        
         let queue = new Queue(), node = null;
         queue.enqueue(this._root);
 
