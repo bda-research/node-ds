@@ -4,28 +4,25 @@
 const BinaryTree = require("./BinaryTree");
 const Queue = require("./LinkedQueue");
 
-const BLACK = 'black';
-const RED = 'red';
-
-function RedBlackTreeNode(value) {
+function AVLTreeNode(value) {
     this.val = value;
-    this.color = null;
+    this.height = 0;
     this.right = this.left = null;
     this.parent = null;
 }
 
-module.exports = class RedBlackTree extends BinaryTree {
+module.exports = class AVLTree extends BinaryTree {
     static Node(value) {
-        return new RedBlackTreeNode(value);
+        return new AVLTreeNode(value);
     }
 
     add(value) {
         let valueRoot = this._root;
-        let nodeToInsert = RedBlackTree.Node(value);
+        let nodeToInsert = AVLTree.Node(value);
 
         if (!valueRoot) {
             this._root = nodeToInsert;
-            this._root.color = BLACK;
+            this._root.height = 1;
         }
         else {
             this._root = _insert(valueRoot, nodeToInsert);
@@ -160,6 +157,30 @@ module.exports = class RedBlackTree extends BinaryTree {
     }
 }
 
+function _calTmpHeight(currentNode) {
+    let leftHeight = currentNode.left ? currentNode.left.height : 0;
+    let rightHeight = currentNode.right ? currentNode.right.height : 0;
+
+    return Math.max(leftHeight, rightHeight) + 1;
+}
+
+function _fixHeight(startNode, treeRoot) {
+    let tmpNode = startNode;
+    while (tmpNode) {
+        let tmpHeight = _calTmpHeight(tmpNode);
+
+        if (tmpNode.height === tmpHeight) {
+            break;
+        }
+        else {
+            tmpNode.height = tmpHeight;
+            tmpNode = tmpNode.parent;
+        }
+    }
+
+    return treeRoot;
+}
+
 function _leftRotate(currentRoot, treeRoot) {
     let tmpNode = currentRoot.right;
     currentRoot.right = tmpNode.left;
@@ -181,6 +202,11 @@ function _leftRotate(currentRoot, treeRoot) {
 
     tmpNode.left = currentRoot;
     currentRoot.parent = tmpNode;
+
+    // the order cannot be changed, cuz currentRoot is child, its change will affect tmpNode (new root)
+    currentRoot.height = _calTmpHeight(currentRoot);
+    tmpNode.height = _calTmpHeight(tmpNode);
+    treeRoot = _fixHeight(tmpNode.parent, treeRoot);
 
     return treeRoot;
 }
@@ -207,59 +233,76 @@ function _rightRotate(currentRoot, treeRoot) {
     tmpNode.right = currentRoot;
     currentRoot.parent = tmpNode;
 
+    // the order cannot be changed, cuz currentRoot is child, its change will affect tmpNode (new root)
+    currentRoot.height = _calTmpHeight(currentRoot);
+    tmpNode.height = _calTmpHeight(tmpNode);
+    treeRoot = _fixHeight(tmpNode.parent, treeRoot);
+
     return treeRoot;
 }
 
-function _insertFix(fixStartNode, treeRoot) {
-    let currentNode = fixStartNode;
+function _fix(startNode, treeRoot) {
+    let tmpNode = startNode;
+    let imbalanceType = 0; // 0 for balance, -1 for left higher, 1 for right higher
+    while (tmpNode) {
+        let leftHeight = tmpNode.left ? tmpNode.left.height : 0;
+        let rightHeight = tmpNode.right ? tmpNode.right.height : 0;
 
-    while (currentNode && currentNode !== treeRoot && currentNode.parent.color === RED) {
-        if (currentNode.parent === currentNode.parent.parent.left) {
-            let uncleNode = currentNode.parent.parent.right;
-
-            if (uncleNode && uncleNode.color === RED) {
-                currentNode.parent.color = BLACK;
-                uncleNode.color = BLACK;
-                currentNode.parent.parent.color = RED;
-                currentNode = currentNode.parent.parent;
+        if (leftHeight - rightHeight > 1) {
+            // LL
+            if (imbalanceType === -1) {
+                treeRoot = _rightRotate(tmpNode, treeRoot);
             }
+            // LR
+            else if (imbalanceType === 1) {
+                treeRoot = _leftRotate(tmpNode.left, treeRoot);
+                treeRoot = _rightRotate(tmpNode, treeRoot);
+            }
+            // when inserting, wont exist imbalanceType === 0, cuz if leftHeight - rightHeight > 1, there has already existed an imbalance case.
 
+            // for delete case
+            // LL-DELETION
             else {
-                if (currentNode === currentNode.parent.right) {
-                    currentNode = currentNode.parent;
-                    treeRoot = _leftRotate(currentNode, treeRoot);
-                }
-
-                currentNode.parent.color = BLACK;
-                currentNode.parent.parent.color = RED;
-                treeRoot = _rightRotate(currentNode.parent.parent, treeRoot)
+                treeRoot = _rightRotate(tmpNode, treeRoot);
             }
+            tmpNode = tmpNode.parent;
+            leftHeight = tmpNode.left ? tmpNode.left.height : 0;
+            rightHeight = tmpNode.right ? tmpNode.right.height : 0;
+        }
+        else if (rightHeight - leftHeight > 1) {
+            // RL
+            if (imbalanceType === -1) {
+                treeRoot = _rightRotate(tmpNode.right, treeRoot);
+                treeRoot = _leftRotate(tmpNode, treeRoot);
+            }
+            // RR
+            else if (imbalanceType === 1) {
+                treeRoot = _leftRotate(tmpNode, treeRoot);
+            }
+
+            // for delete case
+            // RR-DELETION
+            else {
+                treeRoot = _leftRotate(tmpNode, treeRoot);
+            }
+            tmpNode = tmpNode.parent;
+            leftHeight = tmpNode.left ? tmpNode.left.height : 0;
+            rightHeight = tmpNode.right ? tmpNode.right.height : 0;
         }
 
+        // right now there wont exsit the case of |leftHeight - rightHeight| > 1
+        if (leftHeight > rightHeight) {
+            imbalanceType = -1;
+        }
+        else if (leftHeight < rightHeight) {
+            imbalanceType = 1;
+        }
         else {
-            let uncleNode = currentNode.parent.parent.left;
-
-            if (uncleNode && uncleNode.color === RED) {
-                currentNode.parent.color = BLACK;
-                uncleNode.color = BLACK;
-                currentNode.parent.parent.color = RED;
-                currentNode = currentNode.parent.parent;
-            }
-
-            else {
-                if (currentNode === currentNode.parent.left) {
-                    currentNode = currentNode.parent;
-                    treeRoot = _rightRotate(currentNode, treeRoot);
-                }
-
-                currentNode.parent.color = BLACK;
-                currentNode.parent.parent.color = RED;
-                treeRoot = _leftRotate(currentNode.parent.parent, treeRoot)
-            }
+            imbalanceType = 0;
         }
-    }
 
-    treeRoot.color = BLACK;
+        tmpNode = tmpNode.parent;
+    }
 
     return treeRoot;
 }
@@ -289,9 +332,8 @@ function _insert(valueRoot, nodeToInsert) {
         tmpNodeParent.left = nodeToInsert;
     }
 
-    nodeToInsert.color = RED;
-
-    valueRoot = _insertFix(nodeToInsert, valueRoot);
+    valueRoot = _fixHeight(nodeToInsert, valueRoot);
+    valueRoot = _fix(nodeToInsert, valueRoot);
 
     return valueRoot;
 }
@@ -328,10 +370,6 @@ function _replaceForRemove(valueRoot, nodeToRemove, candidate) {
 function _deleteNode(valueRoot, currentNode) {
     // dont have children
     if (!currentNode.left && !currentNode.right) {
-        if (currentNode.color === BLACK) {
-            valueRoot = _removeFix(currentNode, valueRoot);
-        }
-
         if (currentNode.parent) {
             if (currentNode === currentNode.parent.left) {
                 currentNode.parent.left = null;
@@ -339,6 +377,26 @@ function _deleteNode(valueRoot, currentNode) {
             else if (currentNode === currentNode.parent.right) {
                 currentNode.parent.right = null;
             }
+            valueRoot = _fixHeight(currentNode.parent, valueRoot);
+            // digging to the deepest node
+            let startNode = currentNode.parent;
+            while (true && startNode) {
+                let leftHeight = startNode.left ? startNode.left.height : 0;
+                let rightHeight = startNode.right ? startNode.right.height : 0;
+
+                if (leftHeight === 0 && rightHeight === 0) {
+                    break;
+                }
+
+                if (leftHeight > rightHeight) {
+                    startNode = startNode.left;
+                }
+                else {
+                    startNode = startNode.right;
+                }
+            }
+            valueRoot = _fix(startNode, valueRoot);
+
         }
         else {
             valueRoot = null;
@@ -348,34 +406,64 @@ function _deleteNode(valueRoot, currentNode) {
     // only has right child
     else if (!currentNode.left) {
         let tmpNode = currentNode.right;
-        let tmpColor = currentNode.color;
         valueRoot = _replaceForRemove(valueRoot, currentNode, currentNode.right);
         currentNode = tmpNode;
         tmpNode = null;
 
-        if (tmpColor === BLACK) {
-            valueRoot = _removeFix(currentNode, valueRoot);
+        valueRoot = _fixHeight(currentNode.parent, valueRoot);
+        // digging to the deepest node
+        let startNode = currentNode.parent;
+        while (true && startNode) {
+            let leftHeight = startNode.left ? startNode.left.height : 0;
+            let rightHeight = startNode.right ? startNode.right.height : 0;
+
+            if (leftHeight === 0 && rightHeight === 0) {
+                break;
+            }
+
+            if (leftHeight > rightHeight) {
+                startNode = startNode.left;
+            }
+            else {
+                startNode = startNode.right;
+            }
         }
+        valueRoot = _fix(startNode, valueRoot);
     }
 
     // only has left child
     else if (!currentNode.right) {
         let tmpNode = currentNode.left;
-        let tmpColor = currentNode.color;
         valueRoot = _replaceForRemove(valueRoot, currentNode, currentNode.left);
         currentNode = tmpNode;
         tmpNode = null;
 
-        if (tmpColor === BLACK) {
-            valueRoot = _removeFix(currentNode, valueRoot);
+        valueRoot = _fixHeight(currentNode.parent, valueRoot);
+        // digging to the deepest node
+        let startNode = currentNode.parent;
+        while (true && startNode) {
+            let leftHeight = startNode.left ? startNode.left.height : 0;
+            let rightHeight = startNode.right ? startNode.right.height : 0;
+
+            if (leftHeight === 0 && rightHeight === 0) {
+                break;
+            }
+
+            if (leftHeight > rightHeight) {
+                startNode = startNode.left;
+            }
+            else {
+                startNode = startNode.right;
+            }
         }
+        valueRoot = _fix(startNode, valueRoot);
     }
 
     //has both
     else {
         let candidate = _findCandidate(currentNode.right);
 
-        // exchange the value without exchanging the color
+        // exchange the value
         let val = candidate.val;
         candidate.val = currentNode.val;
         currentNode.val = val;
@@ -384,81 +472,6 @@ function _deleteNode(valueRoot, currentNode) {
     }
 
     return valueRoot;
-}
-
-function _removeFix(fixStartNode, treeRoot) {
-    let currentNode = fixStartNode;
-
-    while (currentNode !== treeRoot && currentNode.color === BLACK) {
-        if (currentNode === currentNode.parent.left) {
-            // if a node is black, it must have a brother
-            let brother = currentNode.parent.right;
-
-            if (brother.color === RED) {
-                brother.color = BLACK;
-                currentNode.parent.color = RED;
-                treeRoot = _leftRotate(currentNode.parent, treeRoot);
-                brother = currentNode.parent.right;
-            }
-
-            if ((!brother.left || brother.left.color === BLACK) && (!brother.right || brother.right.color === BLACK)) {
-                brother.color = RED;
-                currentNode = currentNode.parent;
-            }
-
-            else {
-                if (!brother.right || brother.right.color === BLACK) {
-                    brother.left.color = BLACK;
-                    brother.color = RED;
-                    treeRoot = _rightRotate(brother, treeRoot);
-                    brother = currentNode.parent.right;
-                }
-
-                brother.color = currentNode.parent.color;
-                currentNode.parent.color = BLACK;
-                brother.right.color = BLACK;
-
-                treeRoot = _leftRotate(currentNode.parent, treeRoot);
-                currentNode = treeRoot;
-            }
-        }
-
-        else {
-            let brother = currentNode.parent.left;
-
-            if (brother.color === RED) {
-                brother.color = BLACK;
-                currentNode.parent.color = RED;
-                treeRoot = _rightRotate(currentNode.parent, treeRoot);
-                brother = currentNode.parent.left;
-            }
-
-            if ((!brother.left || brother.left.color === BLACK) && (!brother.right || brother.right.color === BLACK)) {
-                brother.color = RED;
-                currentNode = currentNode.parent;
-            }
-
-            else {
-                if (!brother.left || brother.left.color === BLACK) {
-                    brother.right.color = BLACK;
-                    brother.color = RED;
-                    treeRoot = _leftRotate(brother, treeRoot);
-                    brother = currentNode.parent.left;
-                }
-
-                brother.color = currentNode.parent.color;
-                currentNode.parent.color = BLACK;
-                brother.left.color = BLACK;
-
-                treeRoot = _rightRotate(currentNode.parent, treeRoot);
-                currentNode = treeRoot;
-            }
-        }
-    }
-
-    currentNode.color = BLACK;
-
-    return treeRoot;
 }
 
 function _remove(valueRoot, removeValue) {
