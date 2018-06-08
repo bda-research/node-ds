@@ -182,4 +182,22 @@ describe("Linked List", function(){
 			ll.insertStartNode(n).should.be.equal(ll);
 		});
 	});
+
+	it('should return itself to support calling chain when insertStart[Node]()/insertEnd[Node]() is called', function(){
+		var total = 1000;
+		for(var i=0;i<total;i++){
+			var step = Math.floor(Math.random() * 100);
+			for(var j=0;j<step;j++){
+				ll.insertStart(1);
+			}
+			step = Math.floor(Math.random() * 5);
+			for(j=0;j<step;j++){
+				ll.deleteFirst();
+			}
+		}
+
+		while(ll.length){
+			ll.deleteFirst();
+		}
+	});
 });
